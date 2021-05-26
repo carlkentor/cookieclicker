@@ -2,10 +2,13 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { ToolShopContext } from "context";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ToolShopContext>
+      <App />
+    </ToolShopContext>
   </React.StrictMode>,
   document.getElementById("root")
 );
