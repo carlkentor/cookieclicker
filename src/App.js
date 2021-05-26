@@ -1,10 +1,13 @@
-import { Grid } from "components/ui";
+import { Grid, Card } from "components/ui";
 
 import "./scss/main.scss";
 function App() {
   return (
     <>
-      <Grid />
+      <Grid>
+        <Card />
+        <Card />
+      </Grid>
     </>
   );
 }
