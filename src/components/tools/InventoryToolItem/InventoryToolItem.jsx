@@ -1,4 +1,4 @@
-import styles from "./inventoryitem.module.scss";
+import styles from "./inventorytoolitem.module.scss";
 import { useToolShop } from "context";
 
 const InventoryToolItem = ({ id, type, name, price, owned }) => {

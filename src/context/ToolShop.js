@@ -5,11 +5,24 @@ const defaultState = {
   balance: 0,
   tools: tools,
   inventory: [],
+  currentMultiplier: 1,
 };
 
 export const UIContext = React.createContext(defaultState);
 
 UIContext.displayName = "UIContext";
+
+const isClickableItem = (tool) =>
+  tool && tool.hasOwnProperty("clickMultiplier");
+
+const reCalcMultiplier = (inventory) => {
+  const clickableItems = inventory.filter((x) =>
+    x.hasOwnProperty("clickMultiplier")
+  );
+  return clickableItems
+    .map((x) => x.clickMultiplier)
+    .reduce((a, b) => a + b, 0);
+};
 
 function uiReducer(state, action) {
   switch (action.type) {
@@ -25,6 +38,37 @@ function uiReducer(state, action) {
         balance: action.value,
       };
     }
+
+    case "INCREMENT_CURR_MULTIPLIER": {
+      const { tool } = action;
+      console.log("TTOOl", tool);
+      let multiplier = state.currentMultiplier;
+      if (isClickableItem(tool)) {
+        const clone = [...state.inventory, tool];
+        multiplier = reCalcMultiplier(clone);
+      }
+      return {
+        ...state,
+        currentMultiplier: multiplier || 1,
+      };
+    }
+    case "DECREMENT_CURR_MULTIPLIER": {
+      const { tool } = action;
+      let multiplier = state.currentMultiplier;
+      if (isClickableItem(tool)) {
+        const clone = [...state.inventory];
+        const index = clone.findIndex((x) => x.id === tool.id);
+        if (index > -1) {
+          delete clone[index];
+          multiplier = reCalcMultiplier(clone);
+        }
+      }
+      return {
+        ...state,
+        currentMultiplier: multiplier || 1,
+      };
+    }
+
     case "SELL_TOOL": {
       const updateInventory = (id, state) => {
         const inventoryClone = [...state.inventory];
@@ -72,6 +116,14 @@ function uiReducer(state, action) {
 export const UIProvider = (props) => {
   const [state, dispatch] = React.useReducer(uiReducer, defaultState);
 
+  const incrementMultiplier = (value) => {
+    return dispatch({ type: "INCREMENT_CURR_MULTIPLIER", value });
+  };
+
+  const decrementMultiplier = (value) => {
+    return dispatch({ type: "DECREMENT_CURR_MULTIPLIER", value });
+  };
+
   const incrementBalance = (value) => {
     return dispatch({ type: "INCREMENT_BALANCE", value });
   };
@@ -88,6 +140,10 @@ export const UIProvider = (props) => {
         type: "INCREMENT_BALANCE",
         value: newBalance,
       });
+      dispatch({
+        type: "DECREMENT_CURR_MULTIPLIER",
+        tool: matchingTool[0],
+      });
     } else {
       throw Error(`Unable to locate a tool with id: ${id}`);
     }
@@ -102,6 +158,11 @@ export const UIProvider = (props) => {
         type: "DECREMENT_BALANCE",
         value: newBalance,
       });
+
+      dispatch({
+        type: "INCREMENT_CURR_MULTIPLIER",
+        tool: matchingTool[0],
+      });
     } else {
       throw Error(`Unable to locate a tool with id: ${id}`);
     }
@@ -115,6 +176,8 @@ export const UIProvider = (props) => {
       purchaseTool,
       incrementBalance,
       decrementBalance,
+      incrementMultiplier,
+      decrementMultiplier,
     }),
     [state]
   );
