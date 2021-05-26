@@ -1,3 +1,4 @@
+import "./scss/main.scss";
 function App() {
   return <>hello</>;
 }
