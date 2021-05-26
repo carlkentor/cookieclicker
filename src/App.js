@@ -1,11 +1,13 @@
-import { Grid, Card } from "components/ui";
+import { Grid, Card, CookieIncrementer } from "components/ui";
 
 import "./scss/main.scss";
 function App() {
   return (
     <>
       <Grid>
-        <Card />
+        <Card>
+          <CookieIncrementer />
+        </Card>
         <Card />
       </Grid>
     </>
