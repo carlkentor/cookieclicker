@@ -1,6 +1,12 @@
+import { Grid } from "components/ui";
+
 import "./scss/main.scss";
 function App() {
-  return <>hello</>;
+  return (
+    <>
+      <Grid />
+    </>
+  );
 }
 
 export default App;
