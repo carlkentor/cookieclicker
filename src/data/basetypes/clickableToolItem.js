@@ -10,7 +10,7 @@ class ClickableToolItem extends ToolItem {
     clickTreshold,
     clickMultiplier,
   }) {
-    super(id, name, "clickable", type, price, level);
+    super(id, name, type, price, level);
     this.clickTreshold = clickTreshold;
     this.clickMultiplier = clickMultiplier;
   }

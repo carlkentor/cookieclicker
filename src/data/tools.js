@@ -27,7 +27,7 @@ export const buildToolLevels = (name, type, basePrice, amount = 10) => {
     currentPrice += parseInt(fifteenPercentageIncrease(basePrice));
 
     const toolItem = {
-      id: `${type}__${i}`,
+      id: `${name}__${i}`,
       name: name,
       type: type,
       price: currentPrice,
@@ -40,10 +40,10 @@ export const buildToolLevels = (name, type, basePrice, amount = 10) => {
   return tools;
 };
 
-const grandmas = buildToolLevels("Grandma", "clickable", 50, 10);
-const factories = buildToolLevels("Factory", "auto", 100, 10);
-const banks = buildToolLevels("Bank", "auto", 200, 5);
-const mines = buildToolLevels("Mine", "auto", 300, 5);
+const grandmas = buildToolLevels("Grandma", "clickable", 10, 10);
+const factories = buildToolLevels("Factory", "auto", 40, 10);
+const banks = buildToolLevels("Bank", "auto", 100, 5);
+const mines = buildToolLevels("Mine", "auto", 200, 5);
 
 const allTools = [...grandmas, ...factories, ...banks, ...mines];
 

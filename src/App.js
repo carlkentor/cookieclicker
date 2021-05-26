@@ -1,5 +1,5 @@
 import { Grid, Card, CookieIncrementer } from "components/ui";
-
+import { ToolInventory, AllTools } from "components/tools";
 import "./scss/main.scss";
 function App() {
   return (
@@ -8,7 +8,12 @@ function App() {
         <Card>
           <CookieIncrementer />
         </Card>
-        <Card />
+        <Card>
+          <ToolInventory />
+        </Card>
+        <Card>
+          <AllTools />
+        </Card>
       </Grid>
     </>
   );

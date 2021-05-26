@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    justify-content: space-around;
+
+    .container__heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .container__heading__info {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+        }
+    }
+
+    .container__body {
+        display: flex;
+        align-items: flex-start;
+    }
+}

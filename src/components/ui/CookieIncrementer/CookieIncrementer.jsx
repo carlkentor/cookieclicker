@@ -2,7 +2,6 @@ import { useToolShop } from "context";
 import styles from "./cookieincrementer.module.scss";
 const CookieIncrementer = () => {
   const { balance, incrementBalance } = useToolShop();
-  console.log(balance);
   return (
     <div className={styles.container}>
       <h4>Cookie Wallet</h4>

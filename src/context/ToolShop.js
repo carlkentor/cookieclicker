@@ -4,6 +4,7 @@ import { tools } from "data/tools";
 const defaultState = {
   balance: 0,
   tools: tools,
+  inventory: [],
 };
 
 export const UIContext = React.createContext(defaultState);
@@ -24,20 +25,45 @@ function uiReducer(state, action) {
         balance: action.value,
       };
     }
-    case "SELL_PRODUCT": {
+    case "SELL_TOOL": {
+      const updateInventory = (id, state) => {
+        const inventoryClone = [...state.inventory];
+        const index = inventoryClone.findIndex((x) => x.id === id);
+        if (index > -1) {
+          inventoryClone.splice(index, 1);
+        }
+        return inventoryClone;
+      };
+      const updateTools = (tool, state) => {
+        const toolsClone = [...state.tools];
+        let inszertAtIndex = 0;
+        toolsClone.splice(inszertAtIndex, 0, tool);
+        return toolsClone;
+      };
       return {
         ...state,
-        products: state.tools.map((p) =>
-          p.id === action.id ? { ...p, owned: false } : p
-        ),
+        tools: updateTools(action.tool, state),
+        inventory: updateInventory(action.id, state),
       };
     }
-    case "PURCHASE_PRODUCT": {
+    case "PURCHASE_TOOL": {
+      const updateTools = (id, state) => {
+        const toolsClone = [...state.tools];
+        const index = toolsClone.findIndex((x) => x.id === id);
+        if (index > -1) {
+          toolsClone.splice(index, 1);
+        }
+        return toolsClone;
+      };
+      const updateInventory = (tool, state) => {
+        const inventoryClone = [...state.inventory];
+        inventoryClone.push(tool);
+        return inventoryClone;
+      };
       return {
         ...state,
-        products: state.tools.map((p) =>
-          p.id === action.id ? { ...p, owned: true } : p
-        ),
+        tools: updateTools(action.id, state),
+        inventory: updateInventory(action.tool, state),
       };
     }
   }
@@ -55,29 +81,31 @@ export const UIProvider = (props) => {
   };
 
   const sellTool = (id) => {
-    const matchingTool = state.tools.filter((p) => p.id === id);
+    const matchingTool = state.inventory.filter((p) => p.id === id);
     if (matchingTool) {
+      const newBalance = (state.balance += matchingTool[0].price);
       dispatch({
-        type: "DECREMENT_BALANCE",
-        value: (state.balance -= matchingTool.price),
+        type: "INCREMENT_BALANCE",
+        value: newBalance,
       });
     } else {
       throw Error(`Unable to locate a tool with id: ${id}`);
     }
-    return dispatch({ type: "SELL_TOOL", id });
+    return dispatch({ type: "SELL_TOOL", id, tool: matchingTool[0] });
   };
 
   const purchaseTool = (id) => {
     const matchingTool = state.tools.filter((p) => p.id === id);
     if (matchingTool) {
+      const newBalance = (state.balance -= matchingTool[0].price);
       dispatch({
         type: "DECREMENT_BALANCE",
-        value: (state.balance += matchingTool.price),
+        value: newBalance,
       });
     } else {
       throw Error(`Unable to locate a tool with id: ${id}`);
     }
-    return dispatch({ type: "PURCHASE_TOOL", id });
+    return dispatch({ type: "PURCHASE_TOOL", id, tool: matchingTool[0] });
   };
 
   const value = useMemo(
