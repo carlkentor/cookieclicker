@@ -10,11 +10,10 @@ const CookieIncrementer = () => {
         {balance}
       </h2>
       <button
+        className={styles.cookie__btn}
         data-testid="increment_current_balance"
         onClick={() => incrementBalance(balance + 1)}
-      >
-        Cash out
-      </button>
+      ></button>
     </div>
   );
 };
